@@ -6,7 +6,7 @@ import argparse
 import tensorflow as tf
 from core.yolov3 import YOLOV3
 from core.config import cfg
-
+tf.compat.v1.disable_eager_execution()
 import os
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
@@ -24,7 +24,7 @@ preserve_org_names = ['Conv_6', 'Conv_14', 'Conv_22']
 org_weights_mess = []
 tf.Graph().as_default()
 load = tf.train.import_meta_graph(org_weights_path + '.meta')
-with tf.Session() as sess:
+with tf.compat.v1.Session() as sess:
     load.restore(sess, org_weights_path)
     for var in tf.global_variables():
         var_name = var.op.name
@@ -41,8 +41,8 @@ tf.reset_default_graph()
 cur_weights_mess = []
 tf.Graph().as_default()
 with tf.name_scope('input'):
-    input_data = tf.placeholder(dtype=tf.float32, shape=(1, 416, 416, 3), name='input_data')
-    training = tf.placeholder(dtype=tf.bool, name='trainable')
+    input_data = tf.compat.v1.placeholder(dtype=tf.float32, shape=(1, 416, 416, 3), name='input_data')
+    training = tf.compat.v1.placeholder(dtype=tf.bool, name='trainable')
 model = YOLOV3(input_data, training)
 for var in tf.global_variables():
     var_name = var.op.name
@@ -74,12 +74,12 @@ for index in range(org_weights_num):
 with tf.name_scope('load_save'):
     name_to_var_dict = {var.op.name: var for var in tf.global_variables()}
     restore_dict = {cur_to_org_dict[cur_name]: name_to_var_dict[cur_name] for cur_name in cur_to_org_dict}
-    load = tf.train.Saver(restore_dict)
-    save = tf.train.Saver(tf.global_variables())
+    load = tf.compat.v1.train.Saver(restore_dict)
+    save = tf.compat.v1.train.Saver(tf.global_variables())
     for var in tf.global_variables():
         print("=> " + var.op.name)
 
-with tf.Session() as sess:
+with tf.compat.v1.Session() as sess:
     sess.run(tf.global_variables_initializer())
     print('=> Restoring weights from:\t %s' % org_weights_path)
     load.restore(sess, org_weights_path)

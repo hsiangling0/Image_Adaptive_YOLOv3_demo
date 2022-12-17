@@ -14,6 +14,7 @@ from core.yolov3_lowlight import YOLOV3
 from core.config_lowlight import cfg
 from core.config_lowlight import args
 import random
+tf.compat.v1.disable_eager_execution()
 if args.use_gpu == 0:
     gpu_id = '-1'
 else:
@@ -56,22 +57,22 @@ class YoloTrain(object):
         self.trainset            = Dataset('train')
         self.testset             = Dataset('test')
         self.steps_per_period    = len(self.trainset)
-        config = tf.ConfigProto()
+        config = tf.compat.v1.ConfigProto()
         config.gpu_options.allow_growth = True
-        self.sess = tf.Session(config=config)
+        self.sess = tf.compat.v1.Session(config=config)
         # self.sess                = tf.Session(config=tf.ConfigProto(allow_soft_placement=True))
 
         with tf.name_scope('define_input'):
-            self.input_data   = tf.placeholder(tf.float32, [None, None, None, 3], name='input_data')
-            self.label_sbbox  = tf.placeholder(dtype=tf.float32, name='label_sbbox')
-            self.label_mbbox  = tf.placeholder(dtype=tf.float32, name='label_mbbox')
-            self.label_lbbox  = tf.placeholder(dtype=tf.float32, name='label_lbbox')
-            self.true_sbboxes = tf.placeholder(dtype=tf.float32, name='sbboxes')
-            self.true_mbboxes = tf.placeholder(dtype=tf.float32, name='mbboxes')
-            self.true_lbboxes = tf.placeholder(dtype=tf.float32, name='lbboxes')
-            self.input_data_clean   = tf.placeholder(tf.float32, [None, None, None, 3], name='input_data')
+            self.input_data   = tf.compat.v1.placeholder(tf.float32, [None, None, None, 3], name='input_data')
+            self.label_sbbox  = tf.compat.v1.placeholder(dtype=tf.float32, name='label_sbbox')
+            self.label_mbbox  = tf.compat.v1.placeholder(dtype=tf.float32, name='label_mbbox')
+            self.label_lbbox  = tf.compat.v1.placeholder(dtype=tf.float32, name='label_lbbox')
+            self.true_sbboxes = tf.compat.v1.placeholder(dtype=tf.float32, name='sbboxes')
+            self.true_mbboxes = tf.compat.v1.placeholder(dtype=tf.float32, name='mbboxes')
+            self.true_lbboxes = tf.compat.v1.placeholder(dtype=tf.float32, name='lbboxes')
+            self.input_data_clean   = tf.compat.v1.placeholder(tf.float32, [None, None, None, 3], name='input_data')
 
-            self.trainable     = tf.placeholder(dtype=tf.bool, name='training')
+            self.trainable     = tf.compat.v1.placeholder(dtype=tf.bool, name='training')
 
         with tf.name_scope("define_loss"):
             self.model = YOLOV3(self.input_data, self.trainable, self.input_data_clean)
@@ -129,8 +130,8 @@ class YoloTrain(object):
                         self.train_op_with_all_variables = tf.no_op()
 
         with tf.name_scope('loader_and_saver'):
-            self.loader = tf.train.Saver(self.net_var)
-            self.saver  = tf.train.Saver(tf.global_variables(), max_to_keep=5)
+            self.loader = tf.compat.v1.train.Saver(self.net_var)
+            self.saver  = tf.compat.v1.train.Saver(tf.global_variables(), max_to_keep=5)
 
         with tf.name_scope('summary'):
             tf.summary.scalar("learn_rate",      self.learn_rate)

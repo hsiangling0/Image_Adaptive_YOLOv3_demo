@@ -2,14 +2,16 @@
 ####  Accepted by AAAI 2022 [[arxiv]](https://arxiv.org/abs/2112.08088) 
 Wenyu Liu, Gaofeng Ren, Runsheng Yu, Shi Guo, [Jianke Zhu](https://person.zju.edu.cn/jkzhu/645901.html), [Lei Zhang](https://web.comp.polyu.edu.hk/cslzhang/)
       
+This repo forked from https://github.com/wenyyu/Image-Adaptive-YOLO, modifying to implement in Tensorflow 2.0.
+
 ![image](https://user-images.githubusercontent.com/24246792/146731560-fa69fe86-fbf8-4a96-8bd8-a500490ec41d.png)
 # Update
 The image-adaptive filtering techniques used in the segmentation task can be found in our preprint paper.
 #### "Improving Nighttime Driving-Scene Segmentation via Dual Image-adaptive Learnable Filters". [[arxiv]](https://arxiv.org/abs/2207.01331)
 # Installation
 ```bash
-$ git clone https://github.com/wenyyu/Image-Adaptive-YOLO.git  
-$ cd Image-Adaptive-YOLO  
+$ git clone https://github.com/hsiangling0/Image_Adaptive_YOLO_demo.git
+$ cd Image_Adaptive_YOLO_demo 
 # Require python3 and tensorflow
 $ pip install -r ./docs/requirements.txt
 ```
@@ -21,6 +23,8 @@ Voc_foggy_test & Voc_dark_test & Models: [Google Drive](https://drive.google.com
 ```bash  
 # put checkpoint model in the corresponding directory 
 # change the data and model paths in core/config.py
+# this command is used to test the foggy codition, 
+# you can represent it to python evaluate_lowlight.py to test low-light images.
 $ python evaluate.py 
 ```
 
